@@ -1,6 +1,7 @@
-from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+
+from core import settings
 
 
 class ProductManager(models.Manager):
@@ -25,7 +26,8 @@ class Category(models.Model):
 class Product(models.Model):
     category = models.ForeignKey(
         Category, related_name='product', on_delete=models.CASCADE)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255, default='admin')
     description = models.TextField(blank=True)
