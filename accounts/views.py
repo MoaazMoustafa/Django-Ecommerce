@@ -9,6 +9,7 @@ from django.contrib.auth import login, logout
 from .forms import UserEditForm, UserRegisterationForm
 from .token import account_activation_token
 from .models import User
+from django.urls import reverse
 
 
 def signup(request):
@@ -62,6 +63,11 @@ def profile_edit(request):
         registerForm = UserEditForm(instance=request.user, data=request.POST)
         if registerForm.is_valid():
             registerForm.save()
+            return redirect(reverse('account:dashboard'))
+        else:
+            print('registerform not valid 🌹🌹🌹🌹')
+            print(registerForm)
+            return render(request, 'account/user/edit_details.html', {'user_form': registerForm})
     else:
         registerForm = UserEditForm(instance=request.user)
     return render(request, 'account/user/edit_details.html', {'user_form': registerForm})
