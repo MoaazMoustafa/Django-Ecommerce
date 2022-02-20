@@ -63,7 +63,7 @@ def profile_edit(request):
         registerForm = UserEditForm(instance=request.user, data=request.POST)
         if registerForm.is_valid():
             registerForm.save()
-            return redirect(reverse('account:dashboard'))
+            return redirect('account:dashboard')
         else:
             print('registerform not valid 🌹🌹🌹🌹')
             print(registerForm)
@@ -71,3 +71,13 @@ def profile_edit(request):
     else:
         registerForm = UserEditForm(instance=request.user)
     return render(request, 'account/user/edit_details.html', {'user_form': registerForm})
+
+
+@login_required
+def profile_delete(request):
+    if request.method == "POST":
+        user = User.objects.get(pk=request.user.id)
+        user.is_active = False
+        user.save()
+        logout(request)
+    return redirect('account:delete_confirmation')
