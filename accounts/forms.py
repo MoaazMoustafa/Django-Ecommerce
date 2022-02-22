@@ -1,7 +1,7 @@
 from django import forms
 
 from .models import User
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 
 
 class UserRegisterationForm(forms.ModelForm):
@@ -87,3 +87,37 @@ class UserEditForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['first_name'].required = True
         self.fields['email'].required = True
+
+
+# class PwdResetForm(PasswordResetForm):
+#     new_password1 = forms.CharField(label="New password", widget=forms.PasswordInput(
+#         attrs={
+#             'class': 'form-control mb-3', 'placeholder':'New Password', 'id':'form-new-password'
+#         }
+#     ))
+
+
+class PwdResetForm(PasswordResetForm):
+    email = forms.EmailField(max_length=250, widget=forms.TextInput(
+        attrs={'class': 'form-control mb-3',
+               'placeholder': 'Email', 'id': 'form-email'}
+    ))
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        user = User.objects.filter(email=email)
+        if not user:
+            raise forms.ValidationError(
+                'Sorry we can not do this'
+            )
+        return email
+
+
+class PwdResetConfirmForm(SetPasswordForm):
+    new_password1 = forms.CharField(label="New password", widget=forms.PasswordInput(
+        attrs={
+            'class': 'form-control mb-3', 'placeholder': 'New Password', 'id': 'form-new-password'
+        }
+    ))
+    new_password2 = forms.CharField(label='Repeat password', widget=forms.PasswordInput(
+        attrs={'class': 'form-control mb-3', 'placeholder': 'New Password', 'id': 'form-new-pass2'}))

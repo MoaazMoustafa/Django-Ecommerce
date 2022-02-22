@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
-from .forms import UserLoginForm
+from .forms import UserLoginForm, PwdResetForm, PwdResetConfirmForm
 from django.views.generic import TemplateView
 app_name = 'account'
 urlpatterns = [
@@ -15,6 +15,19 @@ urlpatterns = [
     path('profile/edit/', views.profile_edit,  name='profile_edit'),
     path('profile/delete/', views.profile_delete, name='profile_delete'),
     path('profile/delete_confirm/', TemplateView.as_view(
-        template_name='account/user/delete_confirm.html'), name='delete_confirmation')
+        template_name='account/user/delete_confirm.html'), name='delete_confirmation'),
 
+
+    # Password Reset
+    path('password_reset/', auth_views.PasswordResetView.as_view(template_name='account/user/password_reset_form.html',
+                                                                 success_url='password_reset_email_confirm',
+                                                                 email_template_name='account/user/password_reset_email.html',
+                                                                 form_class=PwdResetForm), name='password_reset'),
+    path('password_reset_confirm/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name='account/user/password_reset_confirm.html',
+                                                                                                success_url='/account/password_reset_complete/',
+                                                                                                form_class=PwdResetConfirmForm), name='password_reset_confirm'),
+    path('password_reset/password_reset_email_confirm/', TemplateView.as_view(
+        template_name='account/user/reset_status.html'), name='password_reset_done'),
+    path('password_reset_complete/', TemplateView.as_view(
+        template_name='account/user/reset_status.html'), name='password_reset_complete')
 ]
