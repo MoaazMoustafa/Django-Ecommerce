@@ -4,4 +4,11 @@ I create this project following [Very_academy](https://www.youtube.com/playlist?
 which I recommend to anyone who wants to dig deep into Django. It covers a lot of topics from beginner to advanced ones. I have learned a lot from it 
 - Dealing with sessions
 - Testing every part of your project such as models, views, URLs, ...etc
-The full tutorial code can be found [here](https://github.com/veryacademy/django-ecommerce-project).
+- User Authentication
+ - Login
+ - Registeration
+ - Logout
+ - Password reset
+ - Sending emails for password reset
+- Payment system using Stripe
+- The full tutorial code can be found [here](https://github.com/veryacademy/django-ecommerce-project).
